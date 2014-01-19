@@ -1,39 +1,44 @@
-javascript:(function(window, undefined) {
-/* @autor: Alexander Tserkovniy */
-/* @contacts: alexblbl1 */
-/* @license: MIT */
+javascript: (function(window, undefined) {
+	/* @autor: Alexander Tserkovniy */
+	/* @contacts: alexblbl1 */
+	/* @license: MIT */
 
-/* "javascript:" because it is bookmarklet */
+	/* "javascript:" because it is bookmarklet */
 
 	var possibleVariablesArray, index, version, foundedVariablesArray, tryToDeepSearch, tmt, o;
 
 	/* lazy is available function P.S. hate "!" */
-	function _isAvailable (item) {
+	function _isAvailable(item) {
 		return item !== undefined && item !== null && item !== '';
 	}
 
-	/* is it object */
-	function isObject (obj) {
-		return obj === Object(obj) && Object.prototype.toString.call(obj) !== '[object Array]';
-	}
+	/* is it object type */
+	function isObject (object) {
+		var match;
 
-	function getVersion (obj, key) {
+		match = Object.prototype.toString.call(object)
+			.match(/^\[object\s(.*)\]$/);
+
+		return !!match && match[1] === 'Object';
+	};
+
+	function getVersion(obj, key, name) {
 		try {
 			version = obj[key].fn.jquery;
-			foundedVariablesArray.push('key: ' + obj + '.' + key + ' version: ' + version + '\r\n');
+			foundedVariablesArray.push('Object name: ' + name + '.' + key + '\nversion: ' + version + '\r\n');
 		} catch (e) {}
 	}
 
-	function resolve (msg) {
-		if ( _isAvailable(msg) ) {
+	function resolve(msg) {
+		if (_isAvailable(msg)) {
 			alert('Found jQuery in:\r\n' + msg);
 		} else {
 			tryToDeepSearch = confirm('jQuery did not find.\r\nShould I try deep search?');
 			tryToDeepSearch && deepSearch();
 
-			setTimeout(function () {
-				if ( foundedVariablesArray.length === 0 ) {
-					for ( ; tmt !== 0; tmt -= 1 ) {
+			setTimeout(function() {
+				if (foundedVariablesArray.length === 0) {
+					for (; tmt !== 0; tmt -= 1) {
 						clearTimeout(tmt);
 					}
 
@@ -46,34 +51,35 @@ javascript:(function(window, undefined) {
 	}
 
 	o = 0;
-	function deepSearch (deep) {
+
+	function deepSearch(deep, name) {
 		var key;
 
-		if ( !deep ) {
+		if (!deep) {
 			for (key in window) {
-				if ( window.hasOwnProperty(key) ) {
-					if ( isObject(window[key]) === false ) {
-						getVersion(window, key);
+				if (window.hasOwnProperty(key)) {
+					if (isObject(window[key]) === false) {
+						getVersion(window, key, 'window');
 					}
 
-					if ( isObject(window[key]) ) {
-						deepSearch(window[key]);
+					if (isObject(window[key])) {
+						deepSearch(window[key], key);
 					}
 				}
 			}
 		} else {
 			for (key in deep) {
 				if (deep.hasOwnProperty && deep.hasOwnProperty(key)) {
-					if ( isObject(deep[key]) === false ) {
-						getVersion(deep, key);
+					if (isObject(deep[key]) === false) {
+						getVersion(deep, key, name);
 					}
 
-					if ( isObject(deep[key]) ) {
+					if (isObject(deep[key])) {
 						/* for avoid of missing timeouts */
 						o += 25;
-						tmt = setTimeout(function () {
+						tmt = setTimeout(function() {
 							console.log('search for: ', key, deep);
-							deepSearch(deep[key]);
+							deepSearch(deep[key], key);
 						}, 150 + o);
 					}
 				}
@@ -81,7 +87,7 @@ javascript:(function(window, undefined) {
 		}
 
 		/* for avoid of missing timeouts */
-		setTimeout(function () {
+		setTimeout(function() {
 			o = 150;
 		}, 1000);
 	}
@@ -101,10 +107,10 @@ javascript:(function(window, undefined) {
 		'J'
 	];
 	foundedVariablesArray = [];
-	
-	for ( index = 0; index < possibleVariablesArray.length; index += 1 ) {
-		if ( _isAvailable(window[possibleVariablesArray[index]]) ) {
-			getVersion(window, possibleVariablesArray[index]);
+
+	for (index = 0; index < possibleVariablesArray.length; index += 1) {
+		if (_isAvailable(window[possibleVariablesArray[index]])) {
+			getVersion(window, possibleVariablesArray[index], 'window');
 
 			/*we want know all variables, uncomment next line if not*/
 			/*break*/
