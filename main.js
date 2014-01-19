@@ -5,7 +5,7 @@ javascript: (function(window, undefined) {
 
 	/* "javascript:" because it is bookmarklet */
 
-	var possibleVariablesArray, index, version, foundedVariablesArray, tryToDeepSearch, tmt, o, STOP;
+	var possibleVariablesArray, index, version, foundedVariablesArray, tryToDeepSearch, tmt, o, STOP, paths;
 
 	/* lazy is available function P.S. hate "!" */
 	function _isAvailable(item) {
@@ -49,8 +49,10 @@ javascript: (function(window, undefined) {
 					}
 
 					STOP = true;
+
+					console.dir(paths);
 				// }
-			}, 30000 + o);
+			}, 15000 + o);
 
 			foundedVariablesArray.length && resolve(foundedVariablesArray.join(''));
 		}
@@ -63,6 +65,13 @@ javascript: (function(window, undefined) {
 			/* global exit */
 			return false;
 		}
+
+		/*TODO path recording*/
+		/*if (window.hasOwnProperty(name) === false) {
+			paths.push(name);
+		} else {
+			paths = [];
+		}*/
 
 		if (!deep) {
 			for (key in window) {
@@ -123,6 +132,9 @@ javascript: (function(window, undefined) {
 
 	/* variable index for timeouts. It manages correct timeout's firing */
 	o = 0;
+
+	/* all paths recordings */
+	paths = [];
 
 	for (index = 0; index < possibleVariablesArray.length; index += 1) {
 		if (_isAvailable(window[possibleVariablesArray[index]])) {
