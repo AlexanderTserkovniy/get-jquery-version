@@ -5,7 +5,7 @@ javascript: (function(window, undefined) {
 
 	/* "javascript:" because it is bookmarklet */
 
-	var possibleVariablesArray, index, version, foundedVariablesArray, tryToDeepSearch, tmt, o;
+	var possibleVariablesArray, index, version, foundedVariablesArray, tryToDeepSearch, tmt, o, STOP;
 
 	/* lazy is available function P.S. hate "!" */
 	function _isAvailable(item) {
@@ -37,27 +37,36 @@ javascript: (function(window, undefined) {
 			tryToDeepSearch && deepSearch();
 
 			setTimeout(function() {
-				if (foundedVariablesArray.length === 0) {
+				// if (foundedVariablesArray.length === 0) {
 					for (; tmt !== 0; tmt -= 1) {
 						clearTimeout(tmt);
 					}
 
-					alert('Sorry I did not find jQuery!');
-				}
+					if ( foundedVariablesArray.length === 0 ) {
+						alert('Sorry I did not find jQuery!');
+					} else {
+						resolve(foundedVariablesArray.join(''));
+					}
+
+					STOP = true;
+				// }
 			}, 30000 + o);
 
 			foundedVariablesArray.length && resolve(foundedVariablesArray.join(''));
 		}
 	}
 
-	o = 0;
-
 	function deepSearch(deep, name) {
 		var key;
 
+		if ( STOP === true ) {
+			/* global exit */
+			return false;
+		}
+
 		if (!deep) {
 			for (key in window) {
-				if (window.hasOwnProperty(key)) {
+				if (window.hasOwnProperty(key) && key !== 'window') {
 					if (isObject(window[key]) === false) {
 						getVersion(window, key, 'window');
 					}
@@ -69,7 +78,7 @@ javascript: (function(window, undefined) {
 			}
 		} else {
 			for (key in deep) {
-				if (deep.hasOwnProperty && deep.hasOwnProperty(key)) {
+				if (deep.hasOwnProperty && deep.hasOwnProperty(key) && key !== 'window' && key !== name) {
 					if (isObject(deep[key]) === false) {
 						getVersion(deep, key, name);
 					}
@@ -77,10 +86,11 @@ javascript: (function(window, undefined) {
 					if (isObject(deep[key])) {
 						/* for avoid of missing timeouts */
 						o += 25;
+						
 						tmt = setTimeout(function() {
 							console.log('search for: ', key, deep);
 							deepSearch(deep[key], key);
-						}, 150 + o);
+						}, 500 + o);
 					}
 				}
 			}
@@ -107,6 +117,12 @@ javascript: (function(window, undefined) {
 		'J'
 	];
 	foundedVariablesArray = [];
+
+	/* main contact-breaker */
+	STOP = false;
+
+	/* variable index for timeouts. It manages correct timeout's firing */
+	o = 0;
 
 	for (index = 0; index < possibleVariablesArray.length; index += 1) {
 		if (_isAvailable(window[possibleVariablesArray[index]])) {
