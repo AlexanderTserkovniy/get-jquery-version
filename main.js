@@ -37,21 +37,19 @@ javascript: (function(window, undefined) {
 			tryToDeepSearch && deepSearch();
 
 			setTimeout(function() {
-				// if (foundedVariablesArray.length === 0) {
-					for (; tmt !== 0; tmt -= 1) {
-						clearTimeout(tmt);
-					}
+				for (; tmt !== 0; tmt -= 1) {
+					clearTimeout(tmt);
+				}
 
-					if ( foundedVariablesArray.length === 0 ) {
-						alert('Sorry I did not find jQuery!');
-					} else {
-						resolve(foundedVariablesArray.join(''));
-					}
+				if ( foundedVariablesArray.length === 0 ) {
+					alert('Sorry I did not find jQuery!');
+				} else {
+					resolve(foundedVariablesArray.join(''));
+				}
 
-					STOP = true;
+				STOP = true;
 
-					console.dir(paths);
-				// }
+				console.dir(paths);
 			}, 15000 + o);
 
 			foundedVariablesArray.length && resolve(foundedVariablesArray.join(''));
