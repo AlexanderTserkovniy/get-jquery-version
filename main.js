@@ -93,7 +93,7 @@ javascript: (function(window, undefined) {
 					if (isObject(deep[key])) {
 						/* for avoid of missing timeouts */
 						o += 25;
-						
+
 						tmt = setTimeout(function() {
 							console.log('search for: ', key, deep);
 							deepSearch(deep[key], key);
@@ -121,7 +121,8 @@ javascript: (function(window, undefined) {
 		'$JQ',
 		'$jq',
 		'$_',
-		'J'
+		'J',
+		'$J'
 	];
 	foundedVariablesArray = [];
 
