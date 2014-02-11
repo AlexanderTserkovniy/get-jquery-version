@@ -122,7 +122,10 @@ javascript: (function(window, undefined) {
 		'$jq',
 		'$_',
 		'J',
-		'$J'
+		'$J',
+
+		/* maxymiser's mmcore */
+		'mmcore.$'
 	];
 	foundedVariablesArray = [];
 
