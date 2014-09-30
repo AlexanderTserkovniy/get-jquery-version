@@ -1,9 +1,7 @@
-javascript: (function(window, undefined) {
+(function(window, undefined) {
 	/* @autor: Alexander Tserkovniy */
 	/* @contacts: alexblbl1 */
 	/* @license: MIT */
-
-	/* "javascript:" because it is bookmarklet */
 
 	var possibleVariablesArray, index, version, foundedVariablesArray, tryToDeepSearch, tmt, o, STOP, paths;
 
@@ -122,10 +120,7 @@ javascript: (function(window, undefined) {
 		'$jq',
 		'$_',
 		'J',
-		'$J',
-
-		/* maxymiser's mmcore */
-		'mmcore.$'
+		'$J'
 	];
 	foundedVariablesArray = [];
 
@@ -146,6 +141,10 @@ javascript: (function(window, undefined) {
 			/*break*/
 		}
 	}
+
+	try {
+		getVersion(mmcore, '$', 'mmcore');
+	} catch (e) {}
 
 	resolve(foundedVariablesArray.join(''));
 })(window);
