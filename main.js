@@ -148,3 +148,26 @@
 
 	resolve(foundedVariablesArray.join(''));
 })(window);
+
+(function() {
+	'use strict';
+
+	var mmcore = document.querySelector('script[src*="mmcore.js"]');
+	var foundMmcore = false;
+	var scriptsBeforeMmcore = Array.prototype.slice.call(document.querySelectorAll('script')).filter(function(scriptElement) {
+		if (~scriptElement.src.indexOf('mmcore.js')) {
+			foundMmcore = true;
+		}
+
+		if (!foundMmcore) {
+			return (~scriptElement.src.indexOf('jquery') || ~scriptElement.src.indexOf('jQuery')) &&
+				~scriptElement.src.indexOf('service.maxymiser.net') === 0;
+		}
+	});
+
+	if (scriptsBeforeMmcore.length) {
+		alert('Found jquery BEFORE mmcore!');
+	} else {
+		alert('jquery is AFTER mmcore!');
+	}
+})();
