@@ -149,10 +149,11 @@
 	resolve(foundedVariablesArray.join(''));
 })(window);
 
+/*global alert */
 (function() {
 	'use strict';
 
-	var mmcore = document.querySelector('script[src*="mmcore.js"]');
+	// var mmcore = document.querySelector('script[src*="mmcore.js"]');
 	var foundMmcore = false;
 	var scriptsBeforeMmcore = Array.prototype.slice.call(document.querySelectorAll('script')).filter(function(scriptElement) {
 		if (~scriptElement.src.indexOf('mmcore.js')) {
@@ -164,6 +165,16 @@
 				~scriptElement.src.indexOf('service.maxymiser.net') === 0;
 		}
 	});
+
+	if (window.mmcore && mmcore.$ && mmcore.$.fn && mmcore.$.fn.jquery) {
+		if (document.getElementById('mm-jquery')) {
+			alert('Found jquery IN mmcore!\nBut you have to wrap your code into\n\nmmcore.addJQueryArrivalCallback');
+		} else {
+			alert('Found jquery IN mmcore!\nSo it is available once.\n(то есть сразу же :))');
+		}
+
+		return true;
+	}
 
 	if (scriptsBeforeMmcore.length) {
 		alert('Found jquery BEFORE mmcore!');
