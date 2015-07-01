@@ -1,1 +1,1 @@
-javascript: (function() {var script = document.createElement('script'); script.src = location.protocol + '//dl.dropboxusercontent.com/s/psvhonslx7073gd/main.js?dl=0&' + (new Date()).valueOf(); (document.head || document.getElementsByTagName('head')[0]).appendChild(script); })();
+javascript: (function() {var script = document.createElement('script'); script.src = location.protocol + '//rawgit.com/AlexanderTserkovniy/get-jquery-version/master/main.js?' + (new Date()).valueOf(); (document.head || document.getElementsByTagName('head')[0]).appendChild(script); })();
