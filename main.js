@@ -18,7 +18,7 @@
 			.match(/^\[object\s(.*)\]$/);
 
 		return !!match && match[1] === 'Object';
-	};
+	}
 
 	function getVersion(obj, key, name) {
 		try {
@@ -92,10 +92,12 @@
 						/* for avoid of missing timeouts */
 						o += 25;
 
-						tmt = setTimeout(function() {
-							console.log('search for: ', key, deep);
-							deepSearch(deep[key], key);
-						}, 500 + o);
+						tmt = setTimeout(function(key) {
+							return function () {
+								console.log('search for: ', key, deep);
+								deepSearch(deep[key], key);
+							};
+						}(key), 500 + o);
 					}
 				}
 			}
@@ -150,7 +152,7 @@
 })(window);
 
 /*global alert */
-(function() {
+(function searchMmcore () {
 	'use strict';
 
 	// var mmcore = document.querySelector('script[src*="mmcore.js"]');
@@ -179,6 +181,6 @@
 	if (scriptsBeforeMmcore.length) {
 		alert('Found jquery BEFORE mmcore!');
 	} else {
-		alert('jquery is AFTER mmcore!');
+		// alert('jquery is AFTER mmcore!');
 	}
 })();
